@@ -13,28 +13,28 @@ const Blog = () => {
       title: 'How to Get the Most Out of SkillSwap',
       date: 'May 15, 2025',
       excerpt: 'Learn the best strategies for finding ideal skill matches and getting the most value from your exchanges.',
-      image: 'https://placehold.co/600x400/e2e8f0/1e293b?text=SkillSwap+Tips'
+      image: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80&w=600&h=400'
     },
     {
       id: 2,
       title: 'Success Stories: From Beginner to Pro',
       date: 'May 10, 2025',
       excerpt: 'Read about how SkillSwap users went from complete beginners to skilled practitioners through peer learning.',
-      image: 'https://placehold.co/600x400/e2e8f0/1e293b?text=Success+Stories'
+      image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=600&h=400'
     },
     {
       id: 3,
       title: 'The Benefits of Peer-to-Peer Learning',
       date: 'May 5, 2025',
       excerpt: 'Discover why learning from peers can be more effective than traditional education methods.',
-      image: 'https://placehold.co/600x400/e2e8f0/1e293b?text=Peer+Learning'
+      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600&h=400'
     },
     {
       id: 4,
       title: 'Building Your Skill Portfolio',
       date: 'April 28, 2025',
       excerpt: 'Tips for showcasing your skills and building a compelling portfolio that attracts skill swap opportunities.',
-      image: 'https://placehold.co/600x400/e2e8f0/1e293b?text=Portfolio+Tips'
+      image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=600&h=400'
     }
   ];
 
