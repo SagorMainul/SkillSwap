@@ -1,11 +1,25 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { toast } = useToast();
+  const location = useLocation();
+  
+  // Simple auth check - in a real app, this would come from an auth context
+  const isLoggedIn = location.pathname === '/dashboard';
+
+  const handleLogout = () => {
+    toast({
+      title: "Logged out",
+      description: "You have been logged out successfully."
+    });
+    // In a real application, this would handle the actual logout process
+  };
 
   return (
     <header className="fixed w-full z-10 bg-background border-b border-border/40 backdrop-blur-md">
@@ -25,12 +39,27 @@ const Header: React.FC = () => {
           <Link to="/about" className="text-foreground/80 hover:text-foreground transition-colors">
             About
           </Link>
-          <Link to="/login">
-            <Button variant="outline" className="mr-2">Log In</Button>
-          </Link>
-          <Link to="/signup">
-            <Button className="gradient-bg text-white">Sign Up</Button>
-          </Link>
+          
+          {isLoggedIn ? (
+            <>
+              <Link to="/dashboard">
+                <Button variant="outline" className="mr-2">Dashboard</Button>
+              </Link>
+              <Button variant="ghost" onClick={handleLogout}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Log Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">
+                <Button variant="outline" className="mr-2">Log In</Button>
+              </Link>
+              <Link to="/signup">
+                <Button className="gradient-bg text-white">Sign Up</Button>
+              </Link>
+            </>
+          )}
         </nav>
         
         {/* Mobile Navigation Toggle */}
@@ -71,12 +100,34 @@ const Header: React.FC = () => {
             >
               About
             </Link>
-            <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-              <Button variant="outline" className="w-32">Log In</Button>
-            </Link>
-            <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
-              <Button className="gradient-bg text-white w-32">Sign Up</Button>
-            </Link>
+            
+            {isLoggedIn ? (
+              <>
+                <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-32">Dashboard</Button>
+                </Link>
+                <Button 
+                  variant="ghost" 
+                  className="w-32"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    handleLogout();
+                  }}
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Log Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-32">Log In</Button>
+                </Link>
+                <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
+                  <Button className="gradient-bg text-white w-32">Sign Up</Button>
+                </Link>
+              </>
+            )}
           </nav>
         </div>
       )}
