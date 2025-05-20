@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, LogOut } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -9,16 +8,22 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { toast } = useToast();
   const location = useLocation();
+  const navigate = useNavigate();
   
   // Simple auth check - in a real app, this would come from an auth context
   const isLoggedIn = location.pathname === '/dashboard';
 
   const handleLogout = () => {
+    // In a real application with authentication, this would handle the actual logout process
+    // For example: authService.logout() or dispatch(logout())
+    
     toast({
       title: "Logged out",
       description: "You have been logged out successfully."
     });
-    // In a real application, this would handle the actual logout process
+    
+    // Redirect to the homepage after logout
+    navigate('/');
   };
 
   return (

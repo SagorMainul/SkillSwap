@@ -3,17 +3,23 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Settings, User, LogOut } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const DashboardHeader: React.FC = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
+    // In a real application with authentication, this would handle the actual logout process
+    // For example: authService.logout() or dispatch(logout())
+    
     toast({
       title: "Logged out",
       description: "You have been logged out successfully."
     });
-    // In a real application, this would handle the actual logout process
+    
+    // Redirect to the homepage after logout
+    navigate('/');
   };
 
   return (
