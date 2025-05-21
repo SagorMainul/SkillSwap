@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Settings, User, LogOut } from 'lucide-react';
+import { Settings, User, LogOut, Users } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const DashboardHeader: React.FC = () => {
@@ -26,6 +26,7 @@ const DashboardHeader: React.FC = () => {
     <header className="bg-background border-b border-border/40 py-3">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/dashboard" className="flex items-center space-x-2" state={{ isLoggedIn: true }}>
+          <Users className="h-6 w-6 text-primary" />
           <span className="text-2xl font-bold gradient-text">SkillSwap</span>
         </Link>
         

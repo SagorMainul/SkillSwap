@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Header: React.FC = () => {
@@ -42,6 +42,7 @@ const Header: React.FC = () => {
     <header className="fixed w-full z-10 bg-background border-b border-border/40 backdrop-blur-md">
       <div className="container mx-auto flex justify-between items-center py-4">
         <Link to="/" className="flex items-center space-x-2">
+          <Users className="h-6 w-6 text-primary" />
           <span className="text-2xl font-bold gradient-text">SkillSwap</span>
         </Link>
         

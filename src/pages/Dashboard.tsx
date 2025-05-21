@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import SkillMatching from '@/components/dashboard/SkillMatching';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,25 @@ const Dashboard = () => {
     setSelectedUser({ id, name });
     setIsMessageModalOpen(true);
   };
+  
+  // Handle opening message modal from notification
+  useEffect(() => {
+    const handleMessageNotification = () => {
+      const params = new URLSearchParams(window.location.search);
+      const msgId = params.get('msgId');
+      const userName = params.get('userName');
+      
+      if (msgId && userName) {
+        setSelectedUser({ id: parseInt(msgId), name: userName });
+        setIsMessageModalOpen(true);
+        
+        // Clean up the URL
+        window.history.replaceState({}, document.title, "/dashboard");
+      }
+    };
+    
+    handleMessageNotification();
+  }, []);
   
   // Store login state
   React.useEffect(() => {

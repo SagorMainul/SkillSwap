@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
@@ -30,39 +29,8 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
 
   // Load initial messages - in a real app, this would come from an API
   useEffect(() => {
-    // Simulate loading messages from an API with more conversation history
-    const initialMessages: Message[] = [
-      {
-        id: 1,
-        senderId: userId,
-        text: `Hi there! I'm ${userName}. How can I help you with your skill learning today?`,
-        timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-      },
-      {
-        id: 2,
-        senderId: 'user',
-        text: "Hello! I'm interested in learning more about the JavaScript basics you're teaching. When could we schedule our first session?",
-        timestamp: new Date(Date.now() - 1000 * 60 * 25), // 25 minutes ago
-      },
-      {
-        id: 3,
-        senderId: userId,
-        text: "That's great! I'm available this weekend, either Saturday morning or Sunday afternoon. Which would work better for you?",
-        timestamp: new Date(Date.now() - 1000 * 60 * 20), // 20 minutes ago
-      },
-      {
-        id: 4,
-        senderId: 'user',
-        text: "Sunday afternoon would be perfect for me. What topics will we cover in the first lesson?",
-        timestamp: new Date(Date.now() - 1000 * 60 * 15), // 15 minutes ago
-      },
-      {
-        id: 5,
-        senderId: userId,
-        text: "For our first session, we'll start with JavaScript fundamentals - variables, data types, and basic functions. I'll also prepare some interactive examples we can work through together.",
-        timestamp: new Date(Date.now() - 1000 * 60 * 5), // 5 minutes ago
-      },
-    ];
+    // Only show previous conversation history, no initial message from the other user
+    const initialMessages: Message[] = [];
     
     setMessages(initialMessages);
   }, [userId, userName]);
@@ -93,7 +61,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
     setMessages([...messages, userMessage]);
     setNewMessage('');
     
-    // Simulate response after a short delay
+    // Simulate response after a short delay, only if this is not the first message or if there are already messages
     setTimeout(() => {
       const responseMessage: Message = {
         id: messages.length + 2,

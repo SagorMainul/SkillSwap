@@ -12,9 +12,11 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import Courses from "./pages/Courses";
+import CourseDetail from "./pages/CourseDetail";
 import HowItWorks from "./pages/HowItWorks";
 import FAQ from "./pages/FAQ";
 import Blog from "./pages/Blog";
+import BlogDetail from "./pages/BlogDetail";
 import Support from "./pages/Support";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
@@ -38,9 +40,11 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
           <Route path="/courses" element={<Courses />} />
+          <Route path="/courses/:id" element={<CourseDetail />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/support" element={<Support />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />

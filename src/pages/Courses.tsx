@@ -128,7 +128,9 @@ const Courses = () => {
                 <p className="text-sm text-gray-600">{course.description}</p>
               </CardContent>
               <CardFooter>
-                <Button className="w-full gradient-bg">View Course</Button>
+                <Link to={`/courses/${course.id}`} state={{ isLoggedIn }}>
+                  <Button className="w-full gradient-bg">View Course</Button>
+                </Link>
               </CardFooter>
             </Card>
           ))}
