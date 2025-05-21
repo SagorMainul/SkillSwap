@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, LogOut } from 'lucide-react';
@@ -10,12 +11,23 @@ const Header: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Simple auth check - in a real app, this would come from an auth context
-  const isLoggedIn = location.pathname === '/dashboard';
+  // Get isLoggedIn from sessionStorage to persist login state
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return sessionStorage.getItem('isLoggedIn') === 'true' || location.pathname === '/dashboard';
+  });
+
+  // Update sessionStorage when login state changes
+  useEffect(() => {
+    if (location.pathname === '/dashboard') {
+      sessionStorage.setItem('isLoggedIn', 'true');
+      setIsLoggedIn(true);
+    }
+  }, [location.pathname]);
 
   const handleLogout = () => {
-    // In a real application with authentication, this would handle the actual logout process
-    // For example: authService.logout() or dispatch(logout())
+    // Clear login state
+    sessionStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
     
     toast({
       title: "Logged out",
@@ -38,7 +50,11 @@ const Header: React.FC = () => {
           <Link to="/how-it-works" className="text-foreground/80 hover:text-foreground transition-colors">
             How It Works
           </Link>
-          <Link to="/courses" className="text-foreground/80 hover:text-foreground transition-colors">
+          <Link 
+            to="/courses" 
+            state={{ isLoggedIn }}
+            className="text-foreground/80 hover:text-foreground transition-colors"
+          >
             Courses
           </Link>
           <Link to="/about" className="text-foreground/80 hover:text-foreground transition-colors">
@@ -47,7 +63,7 @@ const Header: React.FC = () => {
           
           {isLoggedIn ? (
             <>
-              <Link to="/dashboard">
+              <Link to="/dashboard" state={{ isLoggedIn }}>
                 <Button variant="outline" className="mr-2">Dashboard</Button>
               </Link>
               <Button variant="ghost" onClick={handleLogout}>
@@ -93,6 +109,7 @@ const Header: React.FC = () => {
             </Link>
             <Link 
               to="/courses" 
+              state={{ isLoggedIn }}
               className="text-foreground/80 hover:text-foreground transition-colors text-lg"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -108,7 +125,11 @@ const Header: React.FC = () => {
             
             {isLoggedIn ? (
               <>
-                <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                <Link 
+                  to="/dashboard" 
+                  state={{ isLoggedIn }}
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   <Button variant="outline" className="w-32">Dashboard</Button>
                 </Link>
                 <Button 

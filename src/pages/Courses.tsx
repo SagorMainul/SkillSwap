@@ -1,11 +1,14 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Link, useLocation } from 'react-router-dom';
 
 const Courses = () => {
+  const location = useLocation();
+  
   // Sample course data - in a real app, this would come from an API
   const courses = [
     {
@@ -16,7 +19,7 @@ const Courses = () => {
       duration: '4 hours',
       lessons: 10,
       description: 'Learn the basics of JavaScript programming language.',
-      image: 'https://placehold.co/600x400/e2e8f0/1e293b?text=JavaScript'
+      image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=1000&auto=format&fit=crop'
     },
     {
       id: 2,
@@ -26,7 +29,7 @@ const Courses = () => {
       duration: '3 hours',
       lessons: 8,
       description: 'Master the fundamentals of digital photography.',
-      image: 'https://placehold.co/600x400/e2e8f0/1e293b?text=Photography'
+      image: 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=1000&auto=format&fit=crop'
     },
     {
       id: 3,
@@ -36,7 +39,7 @@ const Courses = () => {
       duration: '5 hours',
       lessons: 12,
       description: 'Start your journey learning Spanish with this beginner course.',
-      image: 'https://placehold.co/600x400/e2e8f0/1e293b?text=Spanish'
+      image: 'https://images.unsplash.com/photo-1581273154768-0a9a16887d90?q=80&w=1000&auto=format&fit=crop'
     },
     {
       id: 4,
@@ -46,7 +49,7 @@ const Courses = () => {
       duration: '6 hours',
       lessons: 15,
       description: 'Deep dive into advanced React patterns and best practices.',
-      image: 'https://placehold.co/600x400/e2e8f0/1e293b?text=React'
+      image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1000&auto=format&fit=crop'
     },
     {
       id: 5,
@@ -56,7 +59,7 @@ const Courses = () => {
       duration: '4.5 hours',
       lessons: 12,
       description: 'Start playing guitar with this comprehensive beginner course.',
-      image: 'https://placehold.co/600x400/e2e8f0/1e293b?text=Guitar'
+      image: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?q=80&w=1000&auto=format&fit=crop'
     },
     {
       id: 6,
@@ -66,9 +69,12 @@ const Courses = () => {
       duration: '3 hours',
       lessons: 8,
       description: 'Learn essential cooking techniques and recipes.',
-      image: 'https://placehold.co/600x400/e2e8f0/1e293b?text=Cooking'
+      image: 'https://images.unsplash.com/photo-1556911073-a517e752729c?q=80&w=1000&auto=format&fit=crop'
     }
   ];
+
+  // Get isLoggedIn state from location state or use false as default
+  const isLoggedIn = location.state?.isLoggedIn || false;
 
   return (
     <div className="flex flex-col min-h-screen">

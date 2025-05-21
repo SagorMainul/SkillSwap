@@ -10,8 +10,8 @@ const DashboardHeader: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // In a real application with authentication, this would handle the actual logout process
-    // For example: authService.logout() or dispatch(logout())
+    // Clear login state from session storage
+    sessionStorage.removeItem('isLoggedIn');
     
     toast({
       title: "Logged out",
@@ -25,20 +25,20 @@ const DashboardHeader: React.FC = () => {
   return (
     <header className="bg-background border-b border-border/40 py-3">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/dashboard" className="flex items-center space-x-2">
+        <Link to="/dashboard" className="flex items-center space-x-2" state={{ isLoggedIn: true }}>
           <span className="text-2xl font-bold gradient-text">SkillSwap</span>
         </Link>
         
         <div className="flex items-center space-x-4">
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/dashboard/settings">
+            <Link to="/dashboard/settings" state={{ isLoggedIn: true }}>
               <Settings className="h-5 w-5" />
               <span className="sr-only">Settings</span>
             </Link>
           </Button>
           
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/dashboard/profile">
+            <Link to="/dashboard/profile" state={{ isLoggedIn: true }}>
               <User className="h-5 w-5" />
               <span className="sr-only">Profile</span>
             </Link>

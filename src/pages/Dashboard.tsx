@@ -1,12 +1,26 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import SkillMatching from '@/components/dashboard/SkillMatching';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import MessageModal from '@/components/dashboard/MessageModal';
 
 const Dashboard = () => {
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<{ id: number; name: string } | null>(null);
+  
+  const handleOpenMessage = (id: number, name: string) => {
+    setSelectedUser({ id, name });
+    setIsMessageModalOpen(true);
+  };
+  
+  // Store login state
+  React.useEffect(() => {
+    sessionStorage.setItem('isLoggedIn', 'true');
+  }, []);
+  
   return (
     <div className="flex flex-col min-h-screen">
       <DashboardHeader />
@@ -74,7 +88,14 @@ const Dashboard = () => {
                       </div>
                       <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Active</span>
                     </div>
-                    <Button size="sm" variant="outline" className="w-full mt-2">Message</Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="w-full mt-2"
+                      onClick={() => handleOpenMessage(1, "Alex Johnson")}
+                    >
+                      Message
+                    </Button>
                   </div>
                   
                   <div className="border rounded-lg p-3">
@@ -85,7 +106,14 @@ const Dashboard = () => {
                       </div>
                       <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pending</span>
                     </div>
-                    <Button size="sm" variant="outline" className="w-full mt-2">Cancel Request</Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="w-full mt-2"
+                      onClick={() => handleOpenMessage(3, "Jamie Wright")}
+                    >
+                      Message
+                    </Button>
                   </div>
                 </div>
               </CardContent>
@@ -117,7 +145,7 @@ const Dashboard = () => {
                 </div>
                 
                 <div className="mt-4">
-                  <Link to="/courses">
+                  <Link to="/courses" state={{ isLoggedIn: true }}>
                     <Button variant="outline" className="w-full">Browse All Courses</Button>
                   </Link>
                 </div>
@@ -126,6 +154,16 @@ const Dashboard = () => {
           </div>
         </div>
       </main>
+      
+      {/* Message Modal */}
+      {isMessageModalOpen && selectedUser && (
+        <MessageModal
+          isOpen={isMessageModalOpen}
+          onClose={() => setIsMessageModalOpen(false)}
+          userName={selectedUser.name}
+          userId={selectedUser.id}
+        />
+      )}
     </div>
   );
 };

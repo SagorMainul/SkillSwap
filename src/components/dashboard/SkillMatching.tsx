@@ -1,13 +1,16 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import MatchCard from './MatchCard';
 
-// Mock data
-const MOCK_MATCHES = [
+// Create a messaging modal component
+import MessageModal from './MessageModal';
+
+// Mock data for all potential matches
+const ALL_MATCHES = [
   {
     id: 1,
     name: 'Alex Johnson',
@@ -31,14 +34,50 @@ const MOCK_MATCHES = [
     skill: 'Guitar',
     level: 'Intermediate',
     bio: 'Playing guitar for 10 years. Can teach acoustic or electric guitar, focusing on rock and blues styles.',
+  },
+  {
+    id: 4,
+    name: 'Maria Garcia',
+    avatar: '',
+    skill: 'Spanish',
+    level: 'Advanced',
+    bio: 'Native Spanish speaker with teaching experience. Can help with conversation practice and grammar.',
+  },
+  {
+    id: 5,
+    name: 'David Chen',
+    avatar: '',
+    skill: 'Cooking',
+    level: 'Advanced',
+    bio: 'Culinary school graduate specializing in Asian fusion cuisine. Can teach basic to advanced techniques.',
+  },
+  {
+    id: 6,
+    name: 'Sarah Williams',
+    avatar: '',
+    skill: 'Design',
+    level: 'Intermediate',
+    bio: 'Graphic designer with focus on UI/UX. Can teach Figma, Adobe XD and design principles.',
+  },
+  {
+    id: 7,
+    name: 'Michael Taylor',
+    avatar: '',
+    skill: 'Music',
+    level: 'Beginner',
+    bio: 'Music theory enthusiast learning piano. Can help with understanding basic music notation and rhythm.',
   }
 ];
 
 const SkillMatching: React.FC = () => {
   const [selectedSkill, setSelectedSkill] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [matches, setMatches] = useState(MOCK_MATCHES);
+  const [matches, setMatches] = useState(ALL_MATCHES.slice(0, 3)); // Default to first 3 matches
   const { toast } = useToast();
+  
+  // State for the messaging modal
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<{ id: number; name: string } | null>(null);
 
   const handleFindMatches = () => {
     if (!selectedSkill) {
@@ -52,10 +91,21 @@ const SkillMatching: React.FC = () => {
     
     setIsLoading(true);
 
-    // Simulate API call
+    // Simulate API call with actual filtering based on skill
     setTimeout(() => {
-      // In a real app, this would fetch actual matches from the backend
+      // Filter matches based on selected skill
+      const filteredMatches = ALL_MATCHES.filter(match => 
+        match.skill.toLowerCase() === selectedSkill.toLowerCase() ||
+        selectedSkill === 'all'
+      );
+      
+      setMatches(filteredMatches.length > 0 ? filteredMatches : []);
       setIsLoading(false);
+      
+      toast({
+        title: "Matches found",
+        description: `Found ${filteredMatches.length} matches for ${selectedSkill}.`,
+      });
     }, 1000);
   };
 
@@ -77,11 +127,20 @@ const SkillMatching: React.FC = () => {
   const handleRetryMatch = () => {
     setIsLoading(true);
     
-    // Simulate API call to get new matches
+    // Simulate API call to get new matches - reset to initial state
     setTimeout(() => {
-      setMatches(MOCK_MATCHES);
+      setMatches(ALL_MATCHES.slice(0, 3));
       setIsLoading(false);
+      setSelectedSkill('');
     }, 1000);
+  };
+  
+  const handleOpenMessage = (id: number) => {
+    const user = ALL_MATCHES.find(m => m.id === id);
+    if (user) {
+      setSelectedUser({ id: user.id, name: user.name });
+      setIsMessageModalOpen(true);
+    }
   };
 
   return (
@@ -100,10 +159,14 @@ const SkillMatching: React.FC = () => {
                 <SelectValue placeholder="Select a skill" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="all">All Skills</SelectItem>
                 <SelectItem value="programming">Programming</SelectItem>
+                <SelectItem value="javascript">JavaScript</SelectItem>
                 <SelectItem value="design">Design</SelectItem>
                 <SelectItem value="music">Music</SelectItem>
-                <SelectItem value="language">Language</SelectItem>
+                <SelectItem value="guitar">Guitar</SelectItem>
+                <SelectItem value="spanish">Spanish</SelectItem>
+                <SelectItem value="photography">Photography</SelectItem>
                 <SelectItem value="cooking">Cooking</SelectItem>
               </SelectContent>
             </Select>
@@ -155,6 +218,65 @@ const SkillMatching: React.FC = () => {
           </div>
         )}
       </div>
+      
+      {/* Active Swaps Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Active Swaps</CardTitle>
+          <CardDescription>
+            Your current active skill swap sessions
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="border rounded-lg p-3">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h4 className="font-medium">JavaScript Basics</h4>
+                  <p className="text-xs text-gray-500">with Alex Johnson</p>
+                </div>
+                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Active</span>
+              </div>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="w-full mt-2"
+                onClick={() => handleOpenMessage(1)}
+              >
+                Message
+              </Button>
+            </div>
+            
+            <div className="border rounded-lg p-3">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h4 className="font-medium">Photography Tips</h4>
+                  <p className="text-xs text-gray-500">with Jamie Wright</p>
+                </div>
+                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Active</span>
+              </div>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="w-full mt-2"
+                onClick={() => handleOpenMessage(3)}
+              >
+                Message
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Message Modal */}
+      {isMessageModalOpen && selectedUser && (
+        <MessageModal
+          isOpen={isMessageModalOpen}
+          onClose={() => setIsMessageModalOpen(false)}
+          userName={selectedUser.name}
+          userId={selectedUser.id}
+        />
+      )}
     </div>
   );
 };
