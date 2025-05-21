@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Message {
   id: number;
@@ -29,12 +30,36 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
 
   // Load initial messages - in a real app, this would come from an API
   useEffect(() => {
-    // Simulate loading messages from an API
+    // Simulate loading messages from an API with more conversation history
     const initialMessages: Message[] = [
       {
         id: 1,
         senderId: userId,
         text: `Hi there! I'm ${userName}. How can I help you with your skill learning today?`,
+        timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
+      },
+      {
+        id: 2,
+        senderId: 'user',
+        text: "Hello! I'm interested in learning more about the JavaScript basics you're teaching. When could we schedule our first session?",
+        timestamp: new Date(Date.now() - 1000 * 60 * 25), // 25 minutes ago
+      },
+      {
+        id: 3,
+        senderId: userId,
+        text: "That's great! I'm available this weekend, either Saturday morning or Sunday afternoon. Which would work better for you?",
+        timestamp: new Date(Date.now() - 1000 * 60 * 20), // 20 minutes ago
+      },
+      {
+        id: 4,
+        senderId: 'user',
+        text: "Sunday afternoon would be perfect for me. What topics will we cover in the first lesson?",
+        timestamp: new Date(Date.now() - 1000 * 60 * 15), // 15 minutes ago
+      },
+      {
+        id: 5,
+        senderId: userId,
+        text: "For our first session, we'll start with JavaScript fundamentals - variables, data types, and basic functions. I'll also prepare some interactive examples we can work through together.",
         timestamp: new Date(Date.now() - 1000 * 60 * 5), // 5 minutes ago
       },
     ];
@@ -78,6 +103,11 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
       };
       
       setMessages(prev => [...prev, responseMessage]);
+      
+      toast({
+        title: "New message",
+        description: `${userName} has sent you a message`,
+      });
     }, 1000);
   };
 
@@ -88,6 +118,8 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
       "Good question! Let me explain that concept in more detail.",
       "I'm available this weekend if you'd like to practice more.",
       "Have you tried the exercise we discussed last time?",
+      "Let's set up a time to go through your questions in detail.",
+      "I've prepared some additional resources that might help you with this topic.",
     ];
     
     return responses[Math.floor(Math.random() * responses.length)];
@@ -140,14 +172,14 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
           </div>
         </ScrollArea>
         
-        <form onSubmit={handleSendMessage} className="flex gap-2 mt-4">
-          <Input
+        <form onSubmit={handleSendMessage} className="flex flex-col gap-2 mt-4">
+          <Textarea
             placeholder="Type a message..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            className="flex-1"
+            className="min-h-[80px] resize-none"
           />
-          <Button type="submit">Send</Button>
+          <Button type="submit" className="self-end">Send</Button>
         </form>
       </DialogContent>
     </Dialog>
