@@ -39,7 +39,7 @@ const DashboardHeader: React.FC = () => {
           </Button>
           
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/dashboard/profile" state={{ isLoggedIn: true }}>
+            <Link to="/profile" state={{ isLoggedIn: true }}>
               <User className="h-5 w-5" />
               <span className="sr-only">Profile</span>
             </Link>

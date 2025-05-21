@@ -58,6 +58,13 @@ const Header: React.FC = () => {
           >
             Courses
           </Link>
+          <Link 
+            to="/blog" 
+            state={{ isLoggedIn }}
+            className="text-foreground/80 hover:text-foreground transition-colors"
+          >
+            Blog
+          </Link>
           <Link to="/about" className="text-foreground/80 hover:text-foreground transition-colors">
             About
           </Link>
@@ -100,7 +107,7 @@ const Header: React.FC = () => {
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
         <div className="md:hidden fixed inset-0 top-[60px] bg-background z-20 animate-fade-in">
-          <nav className="flex flex-col items-center space-y-6 py-8">
+          <nav className="flex flex-col items-center space-y-4 py-8">
             <Link 
               to="/how-it-works" 
               className="text-foreground/80 hover:text-foreground transition-colors text-lg"
@@ -117,11 +124,47 @@ const Header: React.FC = () => {
               Courses
             </Link>
             <Link 
+              to="/blog" 
+              state={{ isLoggedIn }}
+              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Blog
+            </Link>
+            <Link 
               to="/about" 
               className="text-foreground/80 hover:text-foreground transition-colors text-lg"
               onClick={() => setIsMenuOpen(false)}
             >
               About
+            </Link>
+            <Link 
+              to="/leaderboard" 
+              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Leaderboard
+            </Link>
+            <Link 
+              to="/verify-student" 
+              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Verify Student
+            </Link>
+            <Link 
+              to="/support" 
+              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Support
+            </Link>
+            <Link 
+              to="/privacy" 
+              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Privacy Policy
             </Link>
             
             {isLoggedIn ? (
@@ -132,6 +175,13 @@ const Header: React.FC = () => {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <Button variant="outline" className="w-32">Dashboard</Button>
+                </Link>
+                <Link 
+                  to="/profile" 
+                  state={{ isLoggedIn }}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Button variant="outline" className="w-32">Profile</Button>
                 </Link>
                 <Button 
                   variant="ghost" 

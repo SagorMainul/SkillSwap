@@ -8,7 +8,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import SkillInput from './SkillInput';
 
-const ProfileSetup: React.FC = () => {
+interface ProfileSetupProps {
+  onComplete?: () => void;
+}
+
+const ProfileSetup: React.FC<ProfileSetupProps> = ({ onComplete }) => {
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const [skillsKnown, setSkillsKnown] = useState<string[]>([]);
@@ -51,14 +55,30 @@ const ProfileSetup: React.FC = () => {
     
     setIsLoading(true);
 
+    // Store data in localStorage
+    const profileData = {
+      username,
+      bio,
+      skillsKnown,
+      skillsToLearn,
+      createdAt: new Date().toISOString()
+    };
+    
     // Simulate API call
     setTimeout(() => {
+      localStorage.setItem('profileSetup', JSON.stringify(profileData));
+      
       toast({
         title: "Profile created",
         description: "Your profile has been set up successfully!",
       });
+      
       setIsLoading(false);
-      // In a real app, this would redirect to the dashboard
+      
+      // Call the onComplete callback if provided
+      if (onComplete) {
+        onComplete();
+      }
     }, 1500);
   };
 

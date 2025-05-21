@@ -6,6 +6,35 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import MessageModal from '@/components/dashboard/MessageModal';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+// Sample enrolled courses data
+const enrolledCourses = [
+  {
+    id: 1,
+    title: "React for Beginners",
+    description: "Learn the fundamentals of React",
+    progress: 45,
+    instructor: "Alex Johnson",
+    duration: "4 hours"
+  },
+  {
+    id: 2,
+    title: "Spanish Conversation Basics",
+    description: "Master everyday Spanish phrases",
+    progress: 20,
+    instructor: "Maria Rodriguez",
+    duration: "2.5 hours"
+  },
+  {
+    id: 3, 
+    title: "Guitar Fundamentals",
+    description: "Learn to play guitar from scratch",
+    progress: 60,
+    instructor: "James Peterson",
+    duration: "3 hours"
+  }
+];
 
 const Dashboard = () => {
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
@@ -85,7 +114,69 @@ const Dashboard = () => {
               </CardContent>
             </Card>
             
-            <SkillMatching />
+            <Tabs defaultValue="matching">
+              <TabsList className="grid grid-cols-2 mb-4">
+                <TabsTrigger value="matching">Skill Matching</TabsTrigger>
+                <TabsTrigger value="myCourses">My Courses</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="matching" className="mt-0">
+                <SkillMatching />
+              </TabsContent>
+              
+              <TabsContent value="myCourses" className="mt-0">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>My Enrolled Courses</CardTitle>
+                    <CardDescription>
+                      Continue learning where you left off
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-5">
+                      {enrolledCourses.map((course) => (
+                        <div key={course.id} className="border rounded-lg p-4">
+                          <div className="flex justify-between">
+                            <div>
+                              <h3 className="font-semibold text-lg">{course.title}</h3>
+                              <p className="text-sm text-muted-foreground">{course.description}</p>
+                              <div className="flex items-center gap-2 mt-1">
+                                <span className="text-xs text-muted-foreground">Instructor: {course.instructor}</span>
+                                <span className="text-xs text-muted-foreground">•</span>
+                                <span className="text-xs text-muted-foreground">{course.duration}</span>
+                              </div>
+                            </div>
+                            <Link to={`/courses/${course.id}`} state={{ isLoggedIn: true }}>
+                              <Button size="sm">Continue</Button>
+                            </Link>
+                          </div>
+                          
+                          {/* Progress bar */}
+                          <div className="mt-3">
+                            <div className="flex justify-between text-xs mb-1">
+                              <span>Progress</span>
+                              <span>{course.progress}%</span>
+                            </div>
+                            <div className="h-2 bg-muted rounded-full">
+                              <div 
+                                className="h-full bg-primary rounded-full" 
+                                style={{ width: `${course.progress}%` }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="mt-6">
+                      <Link to="/courses" state={{ isLoggedIn: true }}>
+                        <Button variant="outline" className="w-full">Explore More Courses</Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </div>
           
           {/* Sidebar */}

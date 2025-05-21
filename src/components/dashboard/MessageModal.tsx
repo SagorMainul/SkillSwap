@@ -24,6 +24,7 @@ interface MessageModalProps {
 const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, userId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [messageCount, setMessageCount] = useState(0);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -33,6 +34,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
     const initialMessages: Message[] = [];
     
     setMessages(initialMessages);
+    setMessageCount(0);
   }, [userId, userName]);
 
   // Scroll to bottom when messages change
@@ -60,13 +62,14 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
     
     setMessages([...messages, userMessage]);
     setNewMessage('');
+    setMessageCount(prevCount => prevCount + 1);
     
-    // Simulate response after a short delay, only if this is not the first message or if there are already messages
+    // Simulate response after a short delay
     setTimeout(() => {
       const responseMessage: Message = {
         id: messages.length + 2,
         senderId: userId,
-        text: getRandomResponse(),
+        text: getRandomResponse(messageCount),
         timestamp: new Date(),
       };
       
@@ -79,18 +82,45 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
     }, 1000);
   };
 
-  const getRandomResponse = () => {
-    const responses = [
+  const getRandomResponse = (count: number) => {
+    const firstResponses = [
       "That sounds great! When would you like to schedule our next session?",
       "I can definitely help you with that. Let me prepare some materials for our next meeting.",
       "Good question! Let me explain that concept in more detail.",
       "I'm available this weekend if you'd like to practice more.",
+    ];
+    
+    const secondResponses = [
       "Have you tried the exercise we discussed last time?",
       "Let's set up a time to go through your questions in detail.",
       "I've prepared some additional resources that might help you with this topic.",
+      "Would Tuesday or Thursday work better for our next meeting?",
     ];
     
-    return responses[Math.floor(Math.random() * responses.length)];
+    const thirdResponses = [
+      "I think you're making great progress! Let's focus on the advanced concepts next.",
+      "I'll send over some practice problems that should help reinforce what we've covered.",
+      "Do you have any specific areas you'd like to focus on in our next session?",
+      "Your progress has been impressive. Let's challenge you with something more advanced.",
+    ];
+    
+    const fourthResponses = [
+      "I've created a custom learning path for you based on your interests and progress.",
+      "Would you like to try a collaborative project to apply what you've learned?",
+      "I'm thinking we should explore some real-world applications of these concepts next time.",
+      "Let's schedule a longer session next time to dive deeper into these topics.",
+    ];
+    
+    switch(count) {
+      case 0:
+        return firstResponses[Math.floor(Math.random() * firstResponses.length)];
+      case 1:
+        return secondResponses[Math.floor(Math.random() * secondResponses.length)];
+      case 2:
+        return thirdResponses[Math.floor(Math.random() * thirdResponses.length)];
+      default:
+        return fourthResponses[Math.floor(Math.random() * fourthResponses.length)];
+    }
   };
 
   const formatTime = (date: Date) => {
