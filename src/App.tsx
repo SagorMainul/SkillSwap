@@ -23,6 +23,7 @@ import Privacy from "./pages/Privacy";
 import CommunityGuidelines from "./pages/CommunityGuidelines";
 import VerifyStudent from "./pages/VerifyStudent";
 import Leaderboard from "./pages/Leaderboard";
+import DashboardLayout from "./components/dashboard/DashboardLayout";
 
 const queryClient = new QueryClient();
 
@@ -37,7 +38,13 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          
+          {/* Dashboard routes with nested layout */}
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Dashboard />} />
+            {/* Add other dashboard routes here */}
+          </Route>
+          
           <Route path="/about" element={<About />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:id" element={<CourseDetail />} />
