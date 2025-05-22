@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -54,7 +53,7 @@ const Courses = () => {
       duration: '5 hours',
       lessons: 12,
       description: 'Start your journey learning Spanish with this beginner course.',
-      image: 'https://images.unsplash.com/photo-1581273154768-0a9a16887d90?q=80&w=1000&auto=format&fit=crop'
+      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1000&auto=format&fit=crop'
     },
     {
       id: 4,
