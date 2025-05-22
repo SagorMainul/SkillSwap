@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import SkillMatching from '@/components/dashboard/SkillMatching';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -36,8 +36,8 @@ const enrolledCourses = [
 ];
 
 const DashboardContent = () => {
-  const [isMessageModalOpen, setIsMessageModalOpen] = React.useState(false);
-  const [selectedUser, setSelectedUser] = React.useState<{ id: number; name: string } | null>(null);
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<{ id: number; name: string } | null>(null);
   
   const handleOpenMessage = (id: number, name: string) => {
     setSelectedUser({ id, name });
@@ -111,9 +111,10 @@ const DashboardContent = () => {
           </Card>
           
           <Tabs defaultValue="matching">
-            <TabsList className="grid grid-cols-2 mb-4">
+            <TabsList className="grid grid-cols-3 mb-4">
               <TabsTrigger value="matching">Skill Matching</TabsTrigger>
               <TabsTrigger value="myCourses">My Courses</TabsTrigger>
+              <TabsTrigger value="courseWatch">Course Watch</TabsTrigger>
             </TabsList>
             
             <TabsContent value="matching" className="mt-0">
@@ -168,6 +169,68 @@ const DashboardContent = () => {
                     <Link to="/courses" state={{ isLoggedIn: true }}>
                       <Button variant="outline" className="w-full">Explore More Courses</Button>
                     </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="courseWatch" className="mt-0">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Course Watch</CardTitle>
+                  <CardDescription>
+                    Watch your enrolled courses and track your progress
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-5">
+                    {enrolledCourses.map((course) => (
+                      <div key={course.id} className="border rounded-lg p-4">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                          <div className="mb-3 sm:mb-0">
+                            <h3 className="font-semibold text-lg">{course.title}</h3>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className="text-xs text-muted-foreground">Instructor: {course.instructor}</span>
+                              <span className="text-xs text-muted-foreground">•</span>
+                              <span className="text-xs text-muted-foreground">{course.duration}</span>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Link to={`/courses/${course.id}`} state={{ isLoggedIn: true }}>
+                              <Button size="sm">Watch</Button>
+                            </Link>
+                            <Button size="sm" variant="outline">Notes</Button>
+                          </div>
+                        </div>
+                        
+                        {/* Progress bar */}
+                        <div className="mt-3">
+                          <div className="flex justify-between text-xs mb-1">
+                            <span>Progress</span>
+                            <span>{course.progress}%</span>
+                          </div>
+                          <div className="h-2 bg-muted rounded-full">
+                            <div 
+                              className="h-full bg-primary rounded-full" 
+                              style={{ width: `${course.progress}%` }}
+                            />
+                          </div>
+                        </div>
+                        
+                        {/* Course status */}
+                        <div className="mt-3 flex justify-between text-xs text-muted-foreground">
+                          <span>Last watched: 2 days ago</span>
+                          <span>{course.progress < 100 ? 'In Progress' : 'Completed'}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-6 flex gap-3">
+                    <Link to="/courses" state={{ isLoggedIn: true }} className="flex-1">
+                      <Button variant="outline" className="w-full">Find New Courses</Button>
+                    </Link>
+                    <Button variant="secondary" className="flex-1">My Learning Path</Button>
                   </div>
                 </CardContent>
               </Card>

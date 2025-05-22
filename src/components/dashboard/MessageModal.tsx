@@ -54,26 +54,26 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
     
     // Add user message
     const userMessage: Message = {
-      id: messages.length + 1,
+      id: Date.now(),
       senderId: 'user',
       text: newMessage,
       timestamp: new Date(),
     };
     
-    setMessages([...messages, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setNewMessage('');
-    setMessageCount(prevCount => prevCount + 1);
     
     // Simulate response after a short delay
     setTimeout(() => {
       const responseMessage: Message = {
-        id: messages.length + 2,
+        id: Date.now() + 1,
         senderId: userId,
-        text: getRandomResponse(messageCount),
+        text: getResponseForMessageCount(messageCount),
         timestamp: new Date(),
       };
       
       setMessages(prev => [...prev, responseMessage]);
+      setMessageCount(prevCount => prevCount + 1);
       
       toast({
         title: "New message",
@@ -82,45 +82,43 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
     }, 1000);
   };
 
-  const getRandomResponse = (count: number) => {
-    const firstResponses = [
-      "That sounds great! When would you like to schedule our next session?",
-      "I can definitely help you with that. Let me prepare some materials for our next meeting.",
-      "Good question! Let me explain that concept in more detail.",
-      "I'm available this weekend if you'd like to practice more.",
+  const getResponseForMessageCount = (count: number) => {
+    const responses = [
+      // First response options
+      [
+        "That sounds great! When would you like to schedule our next session?",
+        "I can definitely help you with that. Let me prepare some materials for our next meeting.",
+        "Good question! Let me explain that concept in more detail.",
+        "I'm available this weekend if you'd like to practice more."
+      ],
+      // Second response options
+      [
+        "Have you tried the exercise we discussed last time?",
+        "Let's set up a time to go through your questions in detail.",
+        "I've prepared some additional resources that might help you with this topic.",
+        "Would Tuesday or Thursday work better for our next meeting?"
+      ],
+      // Third response options
+      [
+        "I think you're making great progress! Let's focus on the advanced concepts next.",
+        "I'll send over some practice problems that should help reinforce what we've covered.",
+        "Do you have any specific areas you'd like to focus on in our next session?",
+        "Your progress has been impressive. Let's challenge you with something more advanced."
+      ],
+      // Fourth and subsequent responses
+      [
+        "I've created a custom learning path for you based on your interests and progress.",
+        "Would you like to try a collaborative project to apply what you've learned?",
+        "I'm thinking we should explore some real-world applications of these concepts next time.",
+        "Let's schedule a longer session next time to dive deeper into these topics."
+      ]
     ];
     
-    const secondResponses = [
-      "Have you tried the exercise we discussed last time?",
-      "Let's set up a time to go through your questions in detail.",
-      "I've prepared some additional resources that might help you with this topic.",
-      "Would Tuesday or Thursday work better for our next meeting?",
-    ];
+    // Select the appropriate response array based on message count
+    const responseArray = count < 3 ? responses[count] : responses[3];
     
-    const thirdResponses = [
-      "I think you're making great progress! Let's focus on the advanced concepts next.",
-      "I'll send over some practice problems that should help reinforce what we've covered.",
-      "Do you have any specific areas you'd like to focus on in our next session?",
-      "Your progress has been impressive. Let's challenge you with something more advanced.",
-    ];
-    
-    const fourthResponses = [
-      "I've created a custom learning path for you based on your interests and progress.",
-      "Would you like to try a collaborative project to apply what you've learned?",
-      "I'm thinking we should explore some real-world applications of these concepts next time.",
-      "Let's schedule a longer session next time to dive deeper into these topics.",
-    ];
-    
-    switch(count) {
-      case 0:
-        return firstResponses[Math.floor(Math.random() * firstResponses.length)];
-      case 1:
-        return secondResponses[Math.floor(Math.random() * secondResponses.length)];
-      case 2:
-        return thirdResponses[Math.floor(Math.random() * thirdResponses.length)];
-      default:
-        return fourthResponses[Math.floor(Math.random() * fourthResponses.length)];
-    }
+    // Select a random response from the appropriate array
+    return responseArray[Math.floor(Math.random() * responseArray.length)];
   };
 
   const formatTime = (date: Date) => {

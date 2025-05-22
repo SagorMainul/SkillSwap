@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, LogOut, Users } from 'lucide-react';
+import { Menu, X, LogOut, Users, BookOpen, Award, FileText, Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Header: React.FC = () => {
@@ -63,7 +63,15 @@ const Header: React.FC = () => {
             state={{ isLoggedIn }}
             className="text-foreground/80 hover:text-foreground transition-colors"
           >
+            <BookOpen className="inline-block mr-1 h-4 w-4" />
             Blog
+          </Link>
+          <Link 
+            to="/leaderboard" 
+            className="text-foreground/80 hover:text-foreground transition-colors"
+          >
+            <Award className="inline-block mr-1 h-4 w-4" />
+            Leaderboard
           </Link>
           <Link to="/about" className="text-foreground/80 hover:text-foreground transition-colors">
             About
@@ -126,10 +134,10 @@ const Header: React.FC = () => {
             <Link 
               to="/blog" 
               state={{ isLoggedIn }}
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
+              className="text-foreground/80 hover:text-foreground transition-colors text-lg flex items-center"
               onClick={() => setIsMenuOpen(false)}
             >
-              Blog
+              <BookOpen className="mr-2 h-5 w-5" /> Blog
             </Link>
             <Link 
               to="/about" 
@@ -140,17 +148,17 @@ const Header: React.FC = () => {
             </Link>
             <Link 
               to="/leaderboard" 
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
+              className="text-foreground/80 hover:text-foreground transition-colors text-lg flex items-center"
               onClick={() => setIsMenuOpen(false)}
             >
-              Leaderboard
+              <Award className="mr-2 h-5 w-5" /> Leaderboard
             </Link>
             <Link 
               to="/verify-student" 
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
+              className="text-foreground/80 hover:text-foreground transition-colors text-lg flex items-center"
               onClick={() => setIsMenuOpen(false)}
             >
-              Verify Student
+              <Shield className="mr-2 h-5 w-5" /> Verify Student
             </Link>
             <Link 
               to="/support" 
@@ -161,10 +169,10 @@ const Header: React.FC = () => {
             </Link>
             <Link 
               to="/privacy" 
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
+              className="text-foreground/80 hover:text-foreground transition-colors text-lg flex items-center"
               onClick={() => setIsMenuOpen(false)}
             >
-              Privacy Policy
+              <FileText className="mr-2 h-5 w-5" /> Privacy Policy
             </Link>
             
             {isLoggedIn ? (
