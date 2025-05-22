@@ -24,7 +24,7 @@ interface MessageModalProps {
 const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, userId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [messageCount, setMessageCount] = useState(0);
+  const [conversationStarted, setConversationStarted] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -34,7 +34,7 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
     const initialMessages: Message[] = [];
     
     setMessages(initialMessages);
-    setMessageCount(0);
+    setConversationStarted(false);
   }, [userId, userName]);
 
   // Scroll to bottom when messages change
@@ -68,12 +68,12 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
       const responseMessage: Message = {
         id: Date.now() + 1,
         senderId: userId,
-        text: getResponseForMessageCount(messageCount),
+        text: getResponseMessage(messages.length, conversationStarted),
         timestamp: new Date(),
       };
       
       setMessages(prev => [...prev, responseMessage]);
-      setMessageCount(prevCount => prevCount + 1);
+      setConversationStarted(true);
       
       toast({
         title: "New message",
@@ -82,43 +82,58 @@ const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, userName, 
     }, 1000);
   };
 
-  const getResponseForMessageCount = (count: number) => {
-    const responses = [
-      // First response options
-      [
+  const getResponseMessage = (messageCount: number, conversationStarted: boolean) => {
+    // First response when conversation hasn't started
+    if (!conversationStarted) {
+      const firstResponses = [
         "That sounds great! When would you like to schedule our next session?",
         "I can definitely help you with that. Let me prepare some materials for our next meeting.",
         "Good question! Let me explain that concept in more detail.",
         "I'm available this weekend if you'd like to practice more."
-      ],
-      // Second response options
+      ];
+      return firstResponses[Math.floor(Math.random() * firstResponses.length)];
+    }
+    
+    // Responses for ongoing conversation
+    const ongoingResponses = [
       [
         "Have you tried the exercise we discussed last time?",
         "Let's set up a time to go through your questions in detail.",
         "I've prepared some additional resources that might help you with this topic.",
         "Would Tuesday or Thursday work better for our next meeting?"
       ],
-      // Third response options
       [
         "I think you're making great progress! Let's focus on the advanced concepts next.",
         "I'll send over some practice problems that should help reinforce what we've covered.",
         "Do you have any specific areas you'd like to focus on in our next session?",
         "Your progress has been impressive. Let's challenge you with something more advanced."
       ],
-      // Fourth and subsequent responses
       [
         "I've created a custom learning path for you based on your interests and progress.",
         "Would you like to try a collaborative project to apply what you've learned?",
         "I'm thinking we should explore some real-world applications of these concepts next time.",
         "Let's schedule a longer session next time to dive deeper into these topics."
+      ],
+      [
+        "That's an interesting point! I hadn't considered that perspective before.",
+        "I agree with your approach. Let's build on that idea.",
+        "Could you elaborate a bit more on what you're looking for?",
+        "I think we should focus on practical applications of this concept."
+      ],
+      [
+        "How about we meet next week to review your progress?",
+        "I found some excellent examples that illustrate this concept perfectly.",
+        "What specific goals would you like to achieve in our next session?",
+        "Your questions are really thoughtful - I can see you've been studying this material carefully."
       ]
     ];
     
-    // Select the appropriate response array based on message count
-    const responseArray = count < 3 ? responses[count] : responses[3];
+    // Get a message set based on the conversation progress (cycling through the options)
+    const responseSetIndex = (messageCount / 2) % ongoingResponses.length;
+    const responseSet = ongoingResponses[Math.floor(responseSetIndex)];
     
-    // Select a random response from the appropriate array
-    return responseArray[Math.floor(Math.random() * responseArray.length)];
+    // Select a random response from the current set
+    return responseSet[Math.floor(Math.random() * responseSet.length)];
   };
 
   const formatTime = (date: Date) => {

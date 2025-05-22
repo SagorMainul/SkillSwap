@@ -219,55 +219,6 @@ const SkillMatching: React.FC = () => {
         )}
       </div>
       
-      {/* Active Swaps Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Active Swaps</CardTitle>
-          <CardDescription>
-            Your current active skill swap sessions
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="border rounded-lg p-3">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h4 className="font-medium">JavaScript Basics</h4>
-                  <p className="text-xs text-gray-500">with Alex Johnson</p>
-                </div>
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Active</span>
-              </div>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="w-full mt-2"
-                onClick={() => handleOpenMessage(1)}
-              >
-                Message
-              </Button>
-            </div>
-            
-            <div className="border rounded-lg p-3">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h4 className="font-medium">Photography Tips</h4>
-                  <p className="text-xs text-gray-500">with Jamie Wright</p>
-                </div>
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Active</span>
-              </div>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="w-full mt-2"
-                onClick={() => handleOpenMessage(3)}
-              >
-                Message
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Message Modal */}
       {isMessageModalOpen && selectedUser && (
         <MessageModal
