@@ -24,6 +24,8 @@ import CommunityGuidelines from "./pages/CommunityGuidelines";
 import VerifyStudent from "./pages/VerifyStudent";
 import Leaderboard from "./pages/Leaderboard";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
+import Settings from "./pages/Settings";
+import DashboardSettings from "./pages/DashboardSettings";
 
 const queryClient = new QueryClient();
 
@@ -38,10 +40,12 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
           
           {/* Dashboard routes with nested layout */}
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<Dashboard />} />
+            <Route path="settings" element={<DashboardSettings />} />
             {/* Add other dashboard routes here */}
           </Route>
           

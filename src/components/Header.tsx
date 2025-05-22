@@ -1,33 +1,31 @@
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, LogOut, Users, BookOpen, Award, FileText, Shield } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from "@/hooks/use-toast";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { Menu } from 'lucide-react';
 
 const Header: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { toast } = useToast();
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
-  // Get isLoggedIn from sessionStorage to persist login state
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    return sessionStorage.getItem('isLoggedIn') === 'true' || location.pathname === '/dashboard';
-  });
+  // Check if the current route is the homepage
+  const isHomePage = location.pathname === '/';
 
-  // Update sessionStorage when login state changes
-  useEffect(() => {
-    if (location.pathname === '/dashboard') {
-      sessionStorage.setItem('isLoggedIn', 'true');
-      setIsLoggedIn(true);
-    }
-  }, [location.pathname]);
+  // Check if user is logged in (example using session storage)
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
 
   const handleLogout = () => {
-    // Clear login state
+    // Clear login state from session storage
     sessionStorage.removeItem('isLoggedIn');
-    setIsLoggedIn(false);
     
     toast({
       title: "Logged out",
@@ -39,183 +37,127 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="fixed w-full z-10 bg-background border-b border-border/40 backdrop-blur-md">
-      <div className="container mx-auto flex justify-between items-center py-4">
-        <Link to="/" className="flex items-center space-x-2">
-          <Users className="h-6 w-6 text-primary" />
-          <span className="text-2xl font-bold gradient-text">SkillSwap</span>
+    <header className="bg-background border-b border-border/40 py-4">
+      <div className="container mx-auto px-4 flex items-center justify-between">
+        {/* Logo and Brand */}
+        <Link to="/" className="text-lg font-bold">
+          SkillSwap
         </Link>
-        
-        {/* Desktop Navigation */}
+
+        {/* Navigation Links */}
         <nav className="hidden md:flex items-center space-x-6">
-          <Link to="/how-it-works" className="text-foreground/80 hover:text-foreground transition-colors">
-            How It Works
-          </Link>
-          <Link 
-            to="/courses" 
-            state={{ isLoggedIn }}
-            className="text-foreground/80 hover:text-foreground transition-colors"
-          >
-            Courses
-          </Link>
-          <Link 
-            to="/blog" 
-            state={{ isLoggedIn }}
-            className="text-foreground/80 hover:text-foreground transition-colors"
-          >
-            <BookOpen className="inline-block mr-1 h-4 w-4" />
-            Blog
-          </Link>
-          <Link 
-            to="/leaderboard" 
-            className="text-foreground/80 hover:text-foreground transition-colors"
-          >
-            <Award className="inline-block mr-1 h-4 w-4" />
-            Leaderboard
-          </Link>
-          <Link to="/about" className="text-foreground/80 hover:text-foreground transition-colors">
+          <Link to="/about" className="hover:text-primary transition-colors">
             About
           </Link>
-          
+          <Link to="/courses" className="hover:text-primary transition-colors">
+            Courses
+          </Link>
+          <Link to="/how-it-works" className="hover:text-primary transition-colors">
+            How it works
+          </Link>
+          <Link to="/faq" className="hover:text-primary transition-colors">
+            FAQ
+          </Link>
+          <Link to="/blog" className="hover:text-primary transition-colors">
+            Blog
+          </Link>
+          <Link to="/support" className="hover:text-primary transition-colors">
+            Support
+          </Link>
+          {isLoggedIn && (
+            <Link to="/leaderboard" className="hover:text-primary transition-colors">
+              Leaderboard
+            </Link>
+          )}
+        </nav>
+
+        {/* Auth Buttons */}
+        <div className="hidden md:flex items-center space-x-4">
           {isLoggedIn ? (
             <>
-              <Link to="/dashboard" state={{ isLoggedIn }}>
-                <Button variant="outline" className="mr-2">Dashboard</Button>
+              <Link to="/profile" state={{ isLoggedIn: true }}>
+                <Button variant="secondary">Profile</Button>
               </Link>
-              <Button variant="ghost" onClick={handleLogout}>
-                <LogOut className="h-4 w-4 mr-2" />
-                Log Out
-              </Button>
+              <Link to="/dashboard" state={{ isLoggedIn: true }}>
+                <Button>Dashboard</Button>
+              </Link>
+              <Button variant="outline" onClick={handleLogout}>Log Out</Button>
             </>
           ) : (
             <>
               <Link to="/login">
-                <Button variant="outline" className="mr-2">Log In</Button>
+                <Button variant="outline">Log In</Button>
               </Link>
               <Link to="/signup">
-                <Button className="gradient-bg text-white">Sign Up</Button>
+                <Button>Sign Up</Button>
               </Link>
             </>
           )}
-        </nav>
+        </div>
         
-        {/* Mobile Navigation Toggle */}
-        <div className="md:hidden">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle Menu"
-          >
-            {isMenuOpen ? <X /> : <Menu />}
-          </Button>
-        </div>
+        {/* Mobile Menu */}
+        <Sheet>
+          <SheetTrigger asChild className="md:hidden">
+            <Button variant="ghost" size="icon">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="sm:w-2/3 md:w-1/2 lg:w-1/3">
+            <SheetHeader className="space-y-2">
+              <SheetTitle>Menu</SheetTitle>
+              <SheetDescription>
+                Explore SkillSwap and manage your account.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="grid gap-4 py-4">
+              <Link to="/about" className="hover:text-primary transition-colors block py-2">
+                About
+              </Link>
+              <Link to="/courses" className="hover:text-primary transition-colors block py-2">
+                Courses
+              </Link>
+              <Link to="/how-it-works" className="hover:text-primary transition-colors block py-2">
+                How it works
+              </Link>
+              <Link to="/faq" className="hover:text-primary transition-colors block py-2">
+                FAQ
+              </Link>
+              <Link to="/blog" className="hover:text-primary transition-colors block py-2">
+                Blog
+              </Link>
+              <Link to="/support" className="hover:text-primary transition-colors block py-2">
+                Support
+              </Link>
+              {isLoggedIn && (
+                <Link to="/leaderboard" className="hover:text-primary transition-colors block py-2">
+                  Leaderboard
+                </Link>
+              )}
+              
+              {isLoggedIn ? (
+                <>
+                  <Link to="/profile" state={{ isLoggedIn: true }} className="block py-2">
+                    <Button variant="secondary" className="w-full">Profile</Button>
+                  </Link>
+                  <Link to="/dashboard" state={{ isLoggedIn: true }} className="block py-2">
+                    <Button className="w-full">Dashboard</Button>
+                  </Link>
+                  <Button variant="outline" onClick={handleLogout} className="w-full">Log Out</Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="block py-2">
+                    <Button variant="outline" className="w-full">Log In</Button>
+                  </Link>
+                  <Link to="/signup" className="block py-2">
+                    <Button className="w-full">Sign Up</Button>
+                  </Link>
+                </>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
-      
-      {/* Mobile Navigation Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-[60px] bg-background z-20 animate-fade-in">
-          <nav className="flex flex-col items-center space-y-4 py-8">
-            <Link 
-              to="/how-it-works" 
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              How It Works
-            </Link>
-            <Link 
-              to="/courses" 
-              state={{ isLoggedIn }}
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Courses
-            </Link>
-            <Link 
-              to="/blog" 
-              state={{ isLoggedIn }}
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg flex items-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <BookOpen className="mr-2 h-5 w-5" /> Blog
-            </Link>
-            <Link 
-              to="/about" 
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-            </Link>
-            <Link 
-              to="/leaderboard" 
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg flex items-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <Award className="mr-2 h-5 w-5" /> Leaderboard
-            </Link>
-            <Link 
-              to="/verify-student" 
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg flex items-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <Shield className="mr-2 h-5 w-5" /> Verify Student
-            </Link>
-            <Link 
-              to="/support" 
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Support
-            </Link>
-            <Link 
-              to="/privacy" 
-              className="text-foreground/80 hover:text-foreground transition-colors text-lg flex items-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <FileText className="mr-2 h-5 w-5" /> Privacy Policy
-            </Link>
-            
-            {isLoggedIn ? (
-              <>
-                <Link 
-                  to="/dashboard" 
-                  state={{ isLoggedIn }}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Button variant="outline" className="w-32">Dashboard</Button>
-                </Link>
-                <Link 
-                  to="/profile" 
-                  state={{ isLoggedIn }}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Button variant="outline" className="w-32">Profile</Button>
-                </Link>
-                <Button 
-                  variant="ghost" 
-                  className="w-32"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    handleLogout();
-                  }}
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Log Out
-                </Button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="outline" className="w-32">Log In</Button>
-                </Link>
-                <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
-                  <Button className="gradient-bg text-white w-32">Sign Up</Button>
-                </Link>
-              </>
-            )}
-          </nav>
-        </div>
-      )}
     </header>
   );
 };
